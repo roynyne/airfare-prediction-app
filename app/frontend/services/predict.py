@@ -36,27 +36,47 @@ class PredictionResponse:
         }
         return api_request
     
+    # def get_response(self):
+    #     api_request = self.url_param_dict()
+    #     predictions = []
+        
+    #     try:
+    #         response = requests.get(api_request['url'], params=api_request['params'], timeout=320)
+    #         response.raise_for_status()
+    #         response_json = response.json()
+
+    #         # Check if the response is a list
+    #         if isinstance(response_json, list):
+    #             for item in response_json:
+    #                 if isinstance(item, dict):
+    #                     for key, value in item.items():
+    #                         if 'Prediction' in key:
+    #                             predictions.append((key, value))
+    #         else:
+    #             print(f"Unexpected response format from {api_request['url']}.")
+
+    #     except requests.exceptions.RequestException as e:
+    #         print(f"Error fetching data from {api_request['url']}: {e}")
+        
+    #     return predictions
+    
     def get_response(self):
         api_request = self.url_param_dict()
         predictions = []
         
-        try:
-            response = requests.get(api_request['url'], params=api_request['params'], timeout=320)
-            response.raise_for_status()
-            response_json = response.json()
+        response = requests.get(api_request['url'], params=api_request['params'], timeout=320)
+        response.raise_for_status()
+        response_json = response.json()
 
-            # Check if the response is a list
-            if isinstance(response_json, list):
-                for item in response_json:
-                    if isinstance(item, dict):
-                        for key, value in item.items():
-                            if 'Prediction' in key:
-                                predictions.append((key, value))
-            else:
-                print(f"Unexpected response format from {api_request['url']}.")
-
-        except requests.exceptions.RequestException as e:
-            print(f"Error fetching data from {api_request['url']}: {e}")
+        # Check if the response is a list
+        if response.status_code == 200:
+            for item in response_json:
+                if isinstance(item, dict):
+                    for key, value in item.items():
+                        if 'Prediction' in key:
+                            predictions.append((key, value))
+        else:
+            print(f"Unexpected response format from {api_request['url']}.")
         
         return predictions
 
@@ -73,7 +93,7 @@ class PredictionResponse:
         predictions = self.get_response()
         result_df, avg_airfare = self.convert_response(predictions)
 
-        if not result_df.empty:
+        if predictions:
             return result_df, avg_airfare
         else:
             print("No valid predictions were received. The prediction service has been suspended due to inactivity, please try again later.")

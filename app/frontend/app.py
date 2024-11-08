@@ -58,41 +58,44 @@ elif num_stops == 3:
 
 # Button to trigger prediction
 if st.button("Predict Airfare"):
-    # Create an instance of the PredictionResponse class
-    prediction_instance = PredictionResponse(
-        origin=origin,
-        destination=destination,
-        date=departure_date,
-        time=departure_time,
-        current_dt=current_datetime,
-        num_stops=num_stops,
-        cabin_type_stop1=cabin_type_stop1,
-        cabin_type_stop2=cabin_type_stop2,
-        cabin_type_stop3=cabin_type_stop3,
-        cabin_type_stop4=cabin_type_stop4
-    )
-    
-    # Get the predictions
-    predictions_df, avg_prediction_value = prediction_instance.final_result()
-    
-    if not predictions_df.empty:
-        # Display the predictions DataFrame
-        st.dataframe(predictions_df, 
-                         hide_index=True,  
-                         width=1000, 
-                         column_config={
-                        "Predicted Airfare": st.column_config.NumberColumn(format="＄ %d")
-                        })
-
-        # Display the average prediction value
-        st.markdown(
-            f"""
-            <div style="text-align: center;">
-            <span style="font-size: 24px; font-weight: bold;">Average Airfare ($)</span><br>
-            <span style="font-size: 40px;">${avg_prediction_value:,.2f}</span>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+    if origin == destination:
+        st.error("Error: The origin and destination cannot be the same. Please select different airports.")
     else:
-        st.error("No valid predictions were received. The prediction service has been suspended due to inactivity, please try again later.")
+        # Create an instance of the PredictionResponse class
+        prediction_instance = PredictionResponse(
+            origin=origin,
+            destination=destination,
+            date=departure_date,
+            time=departure_time,
+            current_dt=current_datetime,
+            num_stops=num_stops,
+            cabin_type_stop1=cabin_type_stop1,
+            cabin_type_stop2=cabin_type_stop2,
+            cabin_type_stop3=cabin_type_stop3,
+            cabin_type_stop4=cabin_type_stop4
+        )
+        
+        # Get the predictions
+        predictions_df, avg_prediction_value = prediction_instance.final_result()
+        
+        if not predictions_df.empty:
+            # Display the predictions DataFrame
+            st.dataframe(predictions_df, 
+                            hide_index=True,  
+                            width=1000, 
+                            column_config={
+                            "Predicted Airfare": st.column_config.NumberColumn(format="＄ %d")
+                            })
+
+            # Display the average prediction value
+            st.markdown(
+                f"""
+                <div style="text-align: center;">
+                <span style="font-size: 24px; font-weight: bold;">Average Airfare ($)</span><br>
+                <span style="font-size: 40px;">${avg_prediction_value:,.2f}</span>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+        else:
+            st.error("No valid predictions were received. The prediction service has been suspended due to inactivity, please try again later.")
