@@ -25,8 +25,8 @@ class PredictionThuso:
         data_dict = {
             "origin_airport": self.origin,
             "destination_airport": self.destination,
-            "cabin_type": self.cabin1,
-            'departure_time_seconds': epoch_seconds
+            'departure_time_seconds': epoch_seconds,
+            "cabin_type": self.cabin1
         }
 
         # Return the input DataFrame.
@@ -55,7 +55,7 @@ class PredictionThuso:
         prediction = model.predict(df)
 
         # Prepare the result dictionary with the rounded prediction.
-        result_dict = {"Prediction 4": round(prediction[0], 2)}
+        result_dict = {"Prediction 4": float(round(prediction.tolist()[0], 2))}
 
         return result_dict
 

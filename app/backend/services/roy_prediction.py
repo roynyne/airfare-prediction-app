@@ -45,7 +45,6 @@ class PredictionRoy:
 
     def prediction_response(self, df):
         try:
-            print(df)
             model = self.load_model()
             prediction = model.predict(df)
             result_dict = {"Prediction 2": round(prediction.tolist()[0], 2)}
@@ -57,7 +56,6 @@ class PredictionRoy:
     def result(self):
         try:
             transformed_df = self.preprocess_input()
-            print(transformed_df)
             return self.prediction_response(transformed_df)
         except Exception as e:
             logging.error(f"Error in the prediction pipeline: {e}")

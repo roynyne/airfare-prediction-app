@@ -6,6 +6,7 @@ from services.sidhant_prediction import PredictionSidhant
 from services.roy_prediction import PredictionRoy
 from services.ayush_prediction import PredictionAyush
 from services.thuso_prediction import PredictionThuso
+import logging
 
 class CombinePredictions:
     def __init__(self, origin: str, destination: str, search_date: str, flight_date: str, flight_time: str, stops: str, cabin1: str, cabin2: str, cabin3: str, cabin4: str):
@@ -45,8 +46,7 @@ class CombinePredictions:
         prediction_list.append(self.get_prediction_1())
         prediction_list.append(self.get_prediction_2())
         prediction_list.append(self.get_prediction_3())
-        print(prediction_list)
-        # prediction_list.append(self.get_prediction_4())
+        prediction_list.append(self.get_prediction_4())
 
         return prediction_list
     
@@ -54,6 +54,9 @@ class CombinePredictions:
         pred_list = self.combine_results()
         # Convert the list of dictionaries into a JSON-formatted string
         response = JSONResponse(content=pred_list, status_code=200)
+
+        # Log the response content as a string
+        logging.info(f"Response content: {response.body.decode()}")
 
         return response
         

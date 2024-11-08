@@ -3,9 +3,22 @@ from fastapi import FastAPI
 from fastapi.responses import PlainTextResponse
 from services.combine_results import CombinePredictions
 from services.brief import BriefResults
+from fastapi.middleware.cors import CORSMiddleware
 
 # Initialize FastAPI app
 app = FastAPI()
+
+# Set allowed origins for CORS
+origins = ["http://localhost:8501", "https://airfare-app.onrender.com"]
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Fast API endpoints
 @app.get("/", response_class=PlainTextResponse)
