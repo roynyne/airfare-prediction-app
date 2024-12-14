@@ -1,3 +1,8 @@
+# Airfare Prediction Part 2: Deploying the Application(s)
+
+![pexels-olly-3769146](https://github.com/user-attachments/assets/f64ab117-d98a-4e89-974b-d6d54c110ad1)
+
+
 ## 1. Deployment
 
 ### a. Model Serving
